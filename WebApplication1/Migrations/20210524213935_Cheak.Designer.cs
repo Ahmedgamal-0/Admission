@@ -4,14 +4,16 @@ using AdmissionSystem.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdmissionSystem.Migrations
 {
     [DbContext(typeof(AdmissionSystemDbContext))]
-    partial class AdmissionSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210524213935_Cheak")]
+    partial class Cheak
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,27 +83,6 @@ namespace AdmissionSystem.Migrations
                     b.HasKey("ApplicantId");
 
                     b.ToTable("Applicant");
-                });
-
-            modelBuilder.Entity("AdmissionSystem.Entities.Document", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ApplicantId");
-
-                    b.Property<string>("Copy");
-
-                    b.Property<string>("DocumentName");
-
-                    b.Property<string>("DocumentType");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicantId");
-
-                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("AdmissionSystem.Entities.EmergencyContact", b =>
@@ -183,14 +164,6 @@ namespace AdmissionSystem.Migrations
                 });
 
             modelBuilder.Entity("AdmissionSystem.Entities.AdmissionDetails", b =>
-                {
-                    b.HasOne("AdmissionSystem.Entities.Applicant", "Applicant")
-                        .WithMany()
-                        .HasForeignKey("ApplicantId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AdmissionSystem.Entities.Document", b =>
                 {
                     b.HasOne("AdmissionSystem.Entities.Applicant", "Applicant")
                         .WithMany()

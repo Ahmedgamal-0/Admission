@@ -18,5 +18,6 @@ namespace AdmissionSystem.Entities
         public DbSet<EmergencyContact> EmergencyContact { get; set; }
         public DbSet<AdmissionDetails> AdmissionDetails { get; set; }
         public DbSet<TransferredStudent> TransferredStudents{ get; set; }
+        public DbSet<Document> Documents { get; set; }
     }
 }
