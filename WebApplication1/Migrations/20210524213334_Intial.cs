@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AdmissionSystem.Migrations
 {
-    public partial class AdmissionTestMigration : Migration
+    public partial class Intial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,6 +31,54 @@ namespace AdmissionSystem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Applicant", x => x.ApplicantId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AdmissionDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Section = table.Column<string>(nullable: true),
+                    Stage = table.Column<string>(nullable: true),
+                    Grade = table.Column<string>(nullable: true),
+                    AcademicYear = table.Column<string>(nullable: true),
+                    ApplicantId = table.Column<int>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false),
+                    SchoolName = table.Column<string>(nullable: true),
+                    LastYearScore = table.Column<string>(nullable: true),
+                    Curriculum = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdmissionDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AdmissionDetails_Applicant_ApplicantId",
+                        column: x => x.ApplicantId,
+                        principalTable: "Applicant",
+                        principalColumn: "ApplicantId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmergencyContact",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Relationship = table.Column<string>(nullable: true),
+                    FullName = table.Column<string>(nullable: true),
+                    MobileNumber = table.Column<string>(nullable: true),
+                    HomeNumber = table.Column<string>(nullable: true),
+                    ApplicantId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmergencyContact", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmergencyContact_Applicant_ApplicantId",
+                        column: x => x.ApplicantId,
+                        principalTable: "Applicant",
+                        principalColumn: "ApplicantId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,6 +113,16 @@ namespace AdmissionSystem.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AdmissionDetails_ApplicantId",
+                table: "AdmissionDetails",
+                column: "ApplicantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmergencyContact_ApplicantId",
+                table: "EmergencyContact",
+                column: "ApplicantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ParentInfo_ApplicantId",
                 table: "ParentInfo",
                 column: "ApplicantId");
@@ -71,6 +130,12 @@ namespace AdmissionSystem.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AdmissionDetails");
+
+            migrationBuilder.DropTable(
+                name: "EmergencyContact");
+
             migrationBuilder.DropTable(
                 name: "ParentInfo");
 

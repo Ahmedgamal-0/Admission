@@ -2,7 +2,7 @@
 
 namespace AdmissionSystem.Migrations
 {
-    public partial class testdatabase : Migration
+    public partial class Cheak : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
