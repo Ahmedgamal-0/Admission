@@ -15,5 +15,6 @@ namespace AdmissionSystem.Entities
         }
         public DbSet<Applicant> Applicant { get; set; }
         public DbSet<ParentInfo> ParentInfo { get; set; }
+        public DbSet<EmergencyContact> EmergencyContact { get; set; }
     }
 }
