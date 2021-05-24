@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace AdmissionSystem.Entities
 {
-    public class EmergencyContact
+    public class AdmissionDetails
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public string Relationship { get; set; }
-        public string FullName { get; set; }
-        public string MobileNumber { get; set; }
-        public string HomeNumber { get; set; }
+        public string Section { get; set; }
+        public string Stage { get; set; }
+        public string Grade { get; set; }
+        public string AcademicYear { get; set; }
         [ForeignKey("ApplicantId")]
         public Applicant Applicant { get; set; }
         public int ApplicantId { get; set; }
