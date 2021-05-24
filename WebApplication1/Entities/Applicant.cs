@@ -26,7 +26,8 @@ namespace AdmissionSystem.Entities
         public String Status { set; get; }
         public String Payment { set; get; }
         public ICollection<ParentInfo> ParentInfo { set; get; } = new List<ParentInfo>();
-        
+        public ICollection<EmergencyContact> EmergencyContact { set; get; } = new List<EmergencyContact>();
+
 
     }
 }
