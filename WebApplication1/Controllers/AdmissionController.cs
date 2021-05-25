@@ -21,7 +21,7 @@ namespace AdmissionSystem.Controllers
         }
         
         [HttpPost]
-        public IActionResult test([FromBody] ApplicantForCreation ApplicantForCreation)
+        public IActionResult AddApplicant([FromBody] ApplicantForCreation ApplicantForCreation)
         {
             var final = Mapper.Map<Applicant>(ApplicantForCreation);
             _AdmissionRepo.AddApplicant(final);
