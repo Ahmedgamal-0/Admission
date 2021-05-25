@@ -28,6 +28,14 @@ namespace AdmissionSystem.Entities
         public ICollection<ParentInfo> ParentInfo { set; get; } = new List<ParentInfo>();
         public ICollection<EmergencyContact> EmergencyContact { set; get; } = new List<EmergencyContact>();
 
+        public ICollection<Sibling> Sibling { set; get; } 
+            = new List<Sibling>();
+
+        public ICollection<MedicalHistory> MedicalHistory { set; get; }
+            = new List<MedicalHistory>();
+
+        
+
 
     }
 }
