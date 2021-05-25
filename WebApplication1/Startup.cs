@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AdmissionSystem.Entities;
+using AdmissionSystem.Models;
+using AdmissionSystem.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +36,7 @@ namespace WebApplication1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddScoped<IAdmissionRepo, AdmissionRepo>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<AdmissionSystemDbContext>(o => o.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB; Database = AdmissionDB; Trusted_Connection = True;"));
         }
@@ -59,6 +61,10 @@ namespace WebApplication1
             app.UseCookiePolicy();
 
             app.UseMvc();
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<AdmissionSystem.Models.ApplicantForCreation, AdmissionSystem.Entities.Applicant>();
+            });
         }
     }
 }
