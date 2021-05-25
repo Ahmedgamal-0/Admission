@@ -1,4 +1,7 @@
 ﻿using AdmissionSystem.Entities;
+using AdmissionSystem.Models;
+using AdmissionSystem.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,16 +10,23 @@ using System.Threading.Tasks;
 
 namespace AdmissionSystem.Controllers
 {
+    [Route("api/testDatabase")]
     public class AdmissionController : Controller
     {
-        private AdmissionSystemDbContext _admissionSystemDbContext;
-        public AdmissionController(AdmissionSystemDbContext admissionSystemDbContext)
+        //private AdmissionSystemDbContext _admissionSystemDbContext;
+        private IAdmissionRepo _AdmissionRepo;
+        public AdmissionController(IAdmissionRepo AdmissionRepo)
         {
-            _admissionSystemDbContext = admissionSystemDbContext;
+            _AdmissionRepo = AdmissionRepo;
         }
-        [Route("api/testDatabase")]
-        public IActionResult test()
+        
+        [HttpPost]
+        public IActionResult test([FromBody] ApplicantForCreation ApplicantForCreation)
         {
+            var final = Mapper.Map<Applicant>(ApplicantForCreation);
+            _AdmissionRepo.AddApplicant(final);
+            _AdmissionRepo.Save();
+            
             return Ok();
         }
     }
