@@ -4,14 +4,16 @@ using AdmissionSystem.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdmissionSystem.Migrations
 {
     [DbContext(typeof(AdmissionSystemDbContext))]
-    partial class AdmissionSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210525174937_EditDataTypeofAttributes")]
+    partial class EditDataTypeofAttributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,7 +226,7 @@ namespace AdmissionSystem.Migrations
 
                     b.Property<int>("Age");
 
-                    b.Property<int>("ApplicantId");
+                    b.Property<int?>("ApplicantId");
 
                     b.Property<string>("Relationship");
 
@@ -343,10 +345,9 @@ namespace AdmissionSystem.Migrations
 
             modelBuilder.Entity("AdmissionSystem.Entities.Sibling", b =>
                 {
-                    b.HasOne("AdmissionSystem.Entities.Applicant", "Applicant")
+                    b.HasOne("AdmissionSystem.Entities.Applicant")
                         .WithMany("Sibling")
-                        .HasForeignKey("ApplicantId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ApplicantId");
                 });
 #pragma warning restore 612, 618
         }
