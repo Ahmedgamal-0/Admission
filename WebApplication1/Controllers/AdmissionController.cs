@@ -31,7 +31,7 @@ namespace AdmissionSystem.Controllers
             return Ok();
         } 
         [HttpPost("{ApplicantId}/ParentInfo")]
-        public IActionResult AddBook(int ApplicantId,[FromBody] ParentInfoForCreation ParentInfoForCreation)
+        public IActionResult AddParentInfo(int ApplicantId,[FromBody] ParentInfoForCreation ParentInfoForCreation)
         {
             if (ParentInfoForCreation == null)
             {
@@ -47,40 +47,7 @@ namespace AdmissionSystem.Controllers
             return Ok();
 
         }
-        [HttpPost("{ApplicantId}/ParentInfo")]
-        public IActionResult AddBook(int ApplicantId, [FromBody] ParentInfoForCreation ParentInfoForCreation)
-        {
-            if (ParentInfoForCreation == null)
-            {
-                return BadRequest();
-            }
-            if (_AdmissionRepo.GetApplicant(ApplicantId) == null)
-            {
-                return NotFound();
-            }
-            var ParentInfo = Mapper.Map<ParentInfo>(ParentInfoForCreation);
-            _AdmissionRepo.AddParentInfo(ApplicantId, ParentInfo);
-            _AdmissionRepo.Save();
-            return Ok();
-
-        }
-
-        [HttpPost("{ApplicantId}/EmergencyContact")]
-        public IActionResult AddEmergencyContact(int ApplicantId, [FromBody] EmergencyContactForCreation EmergencyContactForCreation)
-        {
-            if (EmergencyContactForCreation == null)
-            {
-                return BadRequest();
-            }
-            if (_AdmissionRepo.GetApplicant(ApplicantId) == null)
-            {
-                return NotFound();
-            }
-            var EmergencyContact = Mapper.Map<EmergencyContact>(EmergencyContactForCreation);
-            _AdmissionRepo.AddEmergencyContact(ApplicantId, EmergencyContact);
-            _AdmissionRepo.Save();
-            return Ok();
-
+       
 
         [HttpPost("{ApplicantId}/EmergencyContact")]
         public IActionResult AddEmergencyContact(int ApplicantId, [FromBody] EmergencyContactForCreation EmergencyContactForCreation)
@@ -98,6 +65,9 @@ namespace AdmissionSystem.Controllers
             _AdmissionRepo.Save();
             return Ok();
         }
+
+
+      
 
 
         [HttpPost("AddSibling")]
