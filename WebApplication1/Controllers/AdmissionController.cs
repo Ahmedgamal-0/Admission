@@ -33,6 +33,7 @@ namespace AdmissionSystem.Controllers
         [HttpPost("{ApplicantId}/ParentInfo")]
         public IActionResult AddParentInfo(int ApplicantId,[FromBody] ParentInfoForCreation ParentInfoForCreation)
         {
+            //Hi
             if (ParentInfoForCreation == null)
             {
                 return BadRequest();
