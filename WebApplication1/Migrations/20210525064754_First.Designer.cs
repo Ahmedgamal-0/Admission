@@ -4,14 +4,16 @@ using AdmissionSystem.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdmissionSystem.Migrations
 {
     [DbContext(typeof(AdmissionSystemDbContext))]
-    partial class AdmissionSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210525064754_First")]
+    partial class First
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,15 +135,15 @@ namespace AdmissionSystem.Migrations
 
                     b.Property<int>("ApplicantId");
 
-                    b.Property<bool>("Glass");
+                    b.Property<string>("Glass");
 
-                    b.Property<bool>("Hearing");
+                    b.Property<string>("Hearing");
 
-                    b.Property<string>("MedicalConditions");
+                    b.Property<int>("MedicalConditions");
 
                     b.Property<string>("PhysiologicalConditions");
 
-                    b.Property<bool>("PhysiologicalNeed");
+                    b.Property<string>("PhysiologicalNeed");
 
                     b.HasKey("MedicalHistoryId");
 

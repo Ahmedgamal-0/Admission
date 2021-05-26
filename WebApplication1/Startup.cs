@@ -39,6 +39,7 @@ namespace WebApplication1
             services.AddScoped<IAdmissionRepo, AdmissionRepo>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<AdmissionSystemDbContext>(o => o.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB; Database = AdmissionDB; Trusted_Connection = True;"));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,15 +59,23 @@ namespace WebApplication1
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
             app.UseCookiePolicy();
 
-            app.UseMvc();
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<AdmissionSystem.Models.ApplicantForCreation, AdmissionSystem.Entities.Applicant>();
+
                 cfg.CreateMap<ParentInfoForCreation, ParentInfo>();
                 cfg.CreateMap<EmergencyContactForCreation, EmergencyContact>();
+
+                cfg.CreateMap<SiblingDto, Sibling>();
+                cfg.CreateMap<MedicalHistoryDto, MedicalHistory>();
+
             });
+
+            app.UseMvc();
+            
         }
     }
 }

@@ -30,6 +30,14 @@ namespace AdmissionSystem.Entities
         public ICollection<Document> Documents { set; get; } = new List<Document>();
         public AdmissionDetails AdmissionDetails { set; get; }
 
+        public ICollection<Sibling> Sibling { set; get; } 
+            = new List<Sibling>();
+
+        public ICollection<MedicalHistory> MedicalHistory { set; get; }
+            = new List<MedicalHistory>();
+
+        
+
 
     }
 }

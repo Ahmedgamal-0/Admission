@@ -9,12 +9,18 @@ namespace AdmissionSystem.Services
     public interface IAdmissionRepo
     {
         void AddApplicant(Applicant Applicant);
+
         void AddParentInfo(int _ApplicantId, ParentInfo parentInfo);
         Applicant GetApplicant(int ApplicantId);
         bool ApplicantExist(int _ApplicantId);
         void AddEmergencyContact(int ApplicantId, EmergencyContact EmergencyContact);
         void AddDocument(int ApplicantId, Document Document);
         void AddAdmissionDetails(int ApplicantId, AdmissionDetails AdmissionDetails);
+
+        void AddSibling(Sibling sibling);
+        void AddMedicalDetails(MedicalHistory medicalHistory);
+        void MakePayment(MedicalHistory medicalHistory);
+
         bool Save();
 
 

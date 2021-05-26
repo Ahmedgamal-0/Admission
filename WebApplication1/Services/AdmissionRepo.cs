@@ -63,6 +63,23 @@ namespace AdmissionSystem.Services
                 Applicant.Documents.Add(Document);
             }
         }
+
+        public void AddMedicalDetails(MedicalHistory medicalHistory)
+        {
+            _AdmissionSystemDbContext.MedicalHistory.Add(medicalHistory);
+        }
+
+        public void AddSibling(Sibling sibling)
+        {
+            _AdmissionSystemDbContext.Siblings.Add(sibling);
+        }
+
+        public void MakePayment(MedicalHistory medicalHistory)
+        {
+            throw new NotImplementedException();
+        }
+
+
         public bool Save()
         {
             return (_AdmissionSystemDbContext.SaveChanges() >= 0);
