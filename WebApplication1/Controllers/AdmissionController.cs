@@ -63,6 +63,7 @@ namespace AdmissionSystem.Controllers
             _AdmissionRepo.AddEmergencyContact(ApplicantId, EmergencyContact);
             _AdmissionRepo.Save();
             return Ok();
+        }
 
 
         [HttpPost("AddSibling")]
