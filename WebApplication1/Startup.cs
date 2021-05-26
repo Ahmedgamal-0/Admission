@@ -64,6 +64,8 @@ namespace WebApplication1
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<AdmissionSystem.Models.ApplicantForCreation, AdmissionSystem.Entities.Applicant>();
+                cfg.CreateMap<ParentInfoForCreation, ParentInfo>();
+                cfg.CreateMap<EmergencyContactForCreation, EmergencyContact>();
             });
         }
     }
