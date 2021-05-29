@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdmissionSystem.Models
 {
-    public class SiblingDto
+    public class SiblingForCreation
     {
         public string Relationship { set; get; }
         public string SiblingName { set; get; }
