@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdmissionSystem.Models
 {
-    public class MedicalHistoryDto
+    public class MedicalHistoryForCreation
     {
         public bool Glass { set; get; }
         public bool Hearing { set; get; }
