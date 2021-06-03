@@ -81,9 +81,14 @@ namespace WebApplication1
                 cfg.CreateMap<SiblingForCreation, Sibling>();
                 cfg.CreateMap<MedicalHistoryForCreation, MedicalHistory>();
 
+
+                cfg.CreateMap<Sibling, SiblingDto>();
                 cfg.CreateMap<MedicalHistory, MedicalHistoryDto>();
 
+                cfg.CreateMap<Sibling, SiblingForUpdate>();
+                cfg.CreateMap<SiblingForUpdate, Sibling>();
                 cfg.CreateMap<MedicalHistory, MedicalHistoryForUpdate>();
+                cfg.CreateMap<MedicalHistoryForUpdate, MedicalHistory>();
 
             });
 

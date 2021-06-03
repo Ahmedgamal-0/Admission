@@ -20,7 +20,7 @@ namespace AdmissionSystem.Entities
         public DbSet<TransferredStudent> TransferredStudents { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<MedicalHistory> MedicalHistory { get; set; }
-        public DbSet<Sibling> Siblings { get; set; }
+        public DbSet<Sibling> Sibling { get; set; }
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Fawry> Fawry { get; set; }
         public DbSet<MasterCard> MasterCard { get; set; }
