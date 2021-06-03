@@ -24,19 +24,20 @@ namespace AdmissionSystem.Entities
         public String FamilyStatus { set; get; }
         public String SpokenLanguage { set; get; }
         public String Status { set; get; }
-        public String Payment { set; get; }
+
         public ICollection<ParentInfo> ParentInfo { set; get; } = new List<ParentInfo>();
         public ICollection<EmergencyContact> EmergencyContact { set; get; } = new List<EmergencyContact>();
         public ICollection<Document> Documents { set; get; } = new List<Document>();
         public AdmissionDetails AdmissionDetails { set; get; }
 
-        public ICollection<Sibling> Sibling { set; get; } 
+        public ICollection<Sibling> Sibling { set; get; }
             = new List<Sibling>();
 
-        public ICollection<MedicalHistory> MedicalHistory { set; get; }
-            = new List<MedicalHistory>();
+        public MedicalHistory MedicalHistory { set; get; }
+        public Payment Payment { set; get; }
 
-        
+
+
 
 
     }

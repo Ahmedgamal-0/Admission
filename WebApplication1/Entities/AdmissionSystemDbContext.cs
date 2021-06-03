@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AdmissionSystem.Entities
 {
-    public class AdmissionSystemDbContext:DbContext
+    public class AdmissionSystemDbContext : DbContext
     {
-        public AdmissionSystemDbContext (DbContextOptions<AdmissionSystemDbContext>options):base(options)
+        public AdmissionSystemDbContext(DbContextOptions<AdmissionSystemDbContext> options) : base(options)
         {
             Database.Migrate();
 
@@ -17,7 +17,7 @@ namespace AdmissionSystem.Entities
         public DbSet<ParentInfo> ParentInfo { get; set; }
         public DbSet<EmergencyContact> EmergencyContact { get; set; }
         public DbSet<AdmissionDetails> AdmissionDetails { get; set; }
-        public DbSet<TransferredStudent> TransferredStudents{ get; set; }
+        public DbSet<TransferredStudent> TransferredStudents { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<MedicalHistory> MedicalHistory { get; set; }
         public DbSet<Sibling> Siblings { get; set; }
