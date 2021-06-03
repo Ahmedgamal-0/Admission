@@ -3,19 +3,19 @@ using AdmissionSystem.Models;
 using AdmissionSystem.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AdmissionSystem.Controllers
 {
-    [Route("api/AddApplicant")]
+    [Route("api/applicant")]
     public class AdmissionController : Controller
     {
         //private AdmissionSystemDbContext _admissionSystemDbContext;
@@ -25,7 +25,7 @@ namespace AdmissionSystem.Controllers
             _AdmissionRepo = AdmissionRepo;
         }
 
-        [HttpPost]
+        [HttpPost()]
         public IActionResult AddApplicant([FromBody] ApplicantForCreation ApplicantForCreation)
         {
             var final = Mapper.Map<Applicant>(ApplicantForCreation);
@@ -33,9 +33,9 @@ namespace AdmissionSystem.Controllers
             _AdmissionRepo.Save();
 
             return Ok();
-        } 
+        }
         [HttpPost("{ApplicantId}/ParentInfo")]
-        public IActionResult AddParentInfo(int ApplicantId,[FromBody] ParentInfoForCreation ParentInfoForCreation)
+        public IActionResult AddParentInfo(int ApplicantId, [FromBody] ParentInfoForCreation ParentInfoForCreation)
         {
             //Hi
             if (ParentInfoForCreation == null)
@@ -52,7 +52,7 @@ namespace AdmissionSystem.Controllers
             return Ok();
 
         }
-       
+
 
         [HttpPost("{ApplicantId}/EmergencyContact")]
         public IActionResult AddEmergencyContact(int ApplicantId, [FromBody] EmergencyContactForCreation EmergencyContactForCreation)
@@ -72,58 +72,90 @@ namespace AdmissionSystem.Controllers
         }
 
 
-      
 
-
-        [HttpPost("AddSibling")]
-        public IActionResult AddSibling(SiblingForCreation sibling)
+        /*[HttpPost("{applicantId}/Sibling")]
+        public IActionResult AddSibling(int applicantId, [FromBody] SiblingForCreation sibling)
         {
             if (sibling == null)
             {
                 return BadRequest();
             }
-
             //HttpContext.Session.SetString("ApplicantId", "10");
+            if (_AdmissionRepo.GetApplicant(applicantId) == null)
+            {
+                return NotFound();
+            }
 
             var siblingEntity = Mapper.Map<Sibling>(sibling);
-            _AdmissionRepo.AddSibling(siblingEntity);
+            _AdmissionRepo.AddSibling(applicantId, siblingEntity);
 
             if (!_AdmissionRepo.Save())
             {
-                throw new Exception("failed to add an sibling");
+                throw new Exception("failed to add a sibling");
+            }
+
+            var siblingToReturn = Mapper.Map<SiblingDto>(siblingEntity);
+            return CreatedAtRoute("getSibling", new {applicantId = applicantId, id = siblingToReturn.SibilingId }, siblingToReturn);
+            
+        }
+        */
+
+
+        [HttpPost("{applicantId}/Sibling")]
+        public IActionResult AddSiblings(int applicantId, [FromBody] IEnumerable<SiblingForCreation> siblings)
+        {
+            if (siblings == null)
+            {
+                return BadRequest();
+            }
+
+            if (_AdmissionRepo.GetApplicant(applicantId) == null)
+            {
+                return NotFound();
+            }
+
+            var siblingEntities = Mapper.Map<IEnumerable<Sibling>>(siblings);
+
+            foreach (var sibling in siblingEntities)
+            {
+                _AdmissionRepo.AddSibling(applicantId, sibling);
+            }
+
+            if (!_AdmissionRepo.Save())
+            {
+                throw new Exception("failed to add a sibling");
             }
 
             return Ok();
-            /*var siblingToReturn = Mapper.Map<SiblingDto>(siblingEntity);
-            return CreatedAtRoute("getSibling", new { id = siblingToReturn.id }, siblingToReturn);
-            */
         }
 
-        [HttpPost("AddMedical")]
-        public IActionResult AddMedicalDetails(MedicalHistoryForCreation medicalHistory)
+        [HttpPost("{applicantId}/Medical")]
+        public IActionResult AddMedicalDetails(int applicantId, [FromBody] MedicalHistoryForCreation medicalHistory)
         {
             if (medicalHistory == null)
             {
                 return BadRequest();
             }
 
+            if (_AdmissionRepo.GetApplicant(applicantId) == null)
+            {
+                return NotFound();
+            }
+
             var MedicalEntity = Mapper.Map<MedicalHistory>(medicalHistory);
-            _AdmissionRepo.AddMedicalDetails(MedicalEntity);
+            _AdmissionRepo.AddMedicalDetails(applicantId, MedicalEntity);
 
             if (!_AdmissionRepo.Save())
             {
-                throw new Exception("failed to add an sibling");
+                throw new Exception("failed to add an medical details");
             }
 
-            return Ok();
-            /*var MedicalHistoryToReturn = Mapper.Map<MedicalHistoryDto>(MedicalEntity);
-            return CreatedAtRoute("getMedicalHistory", new { id = MedicalHistoryToReturn.id }, MedicalHistoryToReturn);
-            */
-
+            var MedicalHistoryToReturn = Mapper.Map<MedicalHistoryDto>(MedicalEntity);
+            return CreatedAtRoute("getMedicalHistory", new { applicantId = applicantId, id = MedicalHistoryToReturn.MedicalHistoryId }, MedicalHistoryToReturn);
         }
 
 
-        [HttpPost("MakePayment")]
+        [HttpPost("Payment")]
         public async Task<IActionResult> MakePaymentAsync()
         {
 
@@ -138,12 +170,12 @@ namespace AdmissionSystem.Controllers
 
             HttpClient client = new HttpClient();
             var response = await client.PostAsync(url, reqContent1);
-            
+
 
             string AuthResult = response.Content.ReadAsStringAsync().Result;
 
             //Console.WriteLine(AuthResult);
-            
+
             dynamic marchentData = JObject.Parse(AuthResult);
             //Console.WriteLine(marchentData.token);
 
@@ -167,7 +199,7 @@ namespace AdmissionSystem.Controllers
             string OrderResult = response.Content.ReadAsStringAsync().Result;
             //Console.WriteLine(OrderResult);
 
-            
+
             dynamic orderData = JObject.Parse(OrderResult);
             //Console.WriteLine(orderData.token);
 
@@ -291,12 +323,175 @@ namespace AdmissionSystem.Controllers
 
             return Ok();
         }
+                
+        [HttpGet("{applicantId}/Medical/{id}")]
+        public IActionResult GetMedicalDetails(int applicantId, Guid id)
+        {
+            var MedicalDetailsFromRepo = _AdmissionRepo.GetMedicalHistory(applicantId, id);
+            if (MedicalDetailsFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var MedicalDetails = Mapper.Map<MedicalHistoryDto>(MedicalDetailsFromRepo);
 
 
+            return Ok(MedicalDetails);
+
+        }
+
+        [HttpGet("{applicantId}/siblings/{id}", Name = "getSibling")]
+        public IActionResult GetSibling(int applicantId, Guid id)
+        {
+            if (_AdmissionRepo.GetApplicant(applicantId) == null)
+            {
+                return NotFound();
+            }
+
+            var SiblingFromRepo = _AdmissionRepo.GetSibling(applicantId, id);
+            if (SiblingFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var Sibling = Mapper.Map<SiblingDto>(SiblingFromRepo);
 
 
+            return Ok(Sibling);
+
+        }
+
+        [HttpGet("{applicantId}/siblings")]
+        public IActionResult GetSiblings(int applicantId)
+        {
+            if (_AdmissionRepo.GetApplicant(applicantId) == null)
+            {
+                return NotFound();
+            }
+
+            var SiblingsFromRepo = _AdmissionRepo.GetSiblings(applicantId);
+            if (SiblingsFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var Siblings = Mapper.Map<IEnumerable<SiblingDto>>(SiblingsFromRepo);
 
 
+            return Ok(Siblings);
+
+        }
+
+
+        [HttpDelete("{applicantId}/siblings/{id}")]
+        public IActionResult DeleteSibling(int applicantId, Guid id)
+        {
+            if (_AdmissionRepo.GetApplicant(applicantId) == null)
+            {
+                return NotFound();
+            }
+
+            var SiblingFromRepo = _AdmissionRepo.GetSibling(applicantId, id);
+            if (SiblingFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _AdmissionRepo.DeleteSibling(SiblingFromRepo);
+
+            if (!_AdmissionRepo.Save())
+            {
+                throw new Exception("failed to delete a sibling");
+            }
+
+            return NoContent();
+
+        }
+
+
+        [HttpPatch("{applicantId}/medical/{id}")]
+        public IActionResult PartiallyUpdateMedicalHistory(int applicantId, Guid id,
+           [FromBody] JsonPatchDocument<MedicalHistoryForUpdate> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest();
+            }
+
+            if (_AdmissionRepo.GetApplicant(applicantId) == null)
+            {
+                return NotFound();
+            }
+
+            var MedicalHistoryFromRepo = _AdmissionRepo.GetMedicalHistory(applicantId, id);
+            if (MedicalHistoryFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var medicalHistoryToPatch = Mapper.Map<MedicalHistoryForUpdate>(MedicalHistoryFromRepo);
+            patchDoc.ApplyTo(medicalHistoryToPatch, ModelState);
+
+
+            //add validation
+            //ModelState, any errors in the patch document will make modelState invalid
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            Mapper.Map(medicalHistoryToPatch, MedicalHistoryFromRepo);
+
+            _AdmissionRepo.UpdateMedicalDetails(MedicalHistoryFromRepo);
+            if (!_AdmissionRepo.Save())
+            {
+                throw new Exception("failed to update a Medical Details");
+            }
+
+            return NoContent();
+        }
+
+        [HttpPatch("{applicantId}/siblings/{id}")]
+        public IActionResult PartiallyUpdateSibling(int applicantId, Guid id,
+           [FromBody] JsonPatchDocument<SiblingForUpdate> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest();
+            }
+
+            if (_AdmissionRepo.GetApplicant(applicantId) == null)
+            {
+                return NotFound();
+            }
+
+            var SiblingFromRepo = _AdmissionRepo.GetSibling(applicantId, id);
+            if (SiblingFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var siblingToPatch = Mapper.Map<SiblingForUpdate>(SiblingFromRepo);
+            patchDoc.ApplyTo(siblingToPatch, ModelState);
+
+
+            //add validation
+            //ModelState, any errors in the patch document will make modelState invalid
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            Mapper.Map(siblingToPatch, SiblingFromRepo);
+
+            _AdmissionRepo.UpdateSibling(SiblingFromRepo);
+            if (!_AdmissionRepo.Save())
+            {
+                throw new Exception("failed to update a sibling");
+            }
+
+            return NoContent();
+        }
 
 
     }
