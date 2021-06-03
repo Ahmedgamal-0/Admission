@@ -129,6 +129,7 @@ namespace AdmissionSystem.Controllers
             return Ok();
         }
 
+
         [HttpPost("{applicantId}/Medical")]
         public IActionResult AddMedicalDetails(int applicantId, [FromBody] MedicalHistoryForCreation medicalHistory)
         {
@@ -340,7 +341,7 @@ namespace AdmissionSystem.Controllers
 
         }
 
-        [HttpGet("{applicantId}/siblings/{id}", Name = "getSibling")]
+        [HttpGet("{applicantId}/Siblings/{id}", Name = "getSibling")]
         public IActionResult GetSibling(int applicantId, Guid id)
         {
             if (_AdmissionRepo.GetApplicant(applicantId) == null)
@@ -361,7 +362,7 @@ namespace AdmissionSystem.Controllers
 
         }
 
-        [HttpGet("{applicantId}/siblings")]
+        [HttpGet("{applicantId}/Siblings")]
         public IActionResult GetSiblings(int applicantId)
         {
             if (_AdmissionRepo.GetApplicant(applicantId) == null)

@@ -104,24 +104,23 @@ namespace AdmissionSystem.Services
 
         public Sibling GetSibling(int applicantId, Guid siblingId)
         {
-            return _AdmissionSystemDbContext.Siblings.Where(a => a.ApplicantId == applicantId && a.SibilingId == siblingId).FirstOrDefault();
+            return _AdmissionSystemDbContext.Sibling.Where(a => a.ApplicantId == applicantId && a.SibilingId == siblingId).FirstOrDefault();
         }
 
-
-        IEnumerable<Sibling> IAdmissionRepo.GetSiblings(int applicantId)
+        public IEnumerable<Sibling> GetSiblings(int applicantId)
         {
-            return _AdmissionSystemDbContext.Siblings.Where(a => a.ApplicantId == applicantId).OrderBy(a => a.SiblingName).ToList();
+            return _AdmissionSystemDbContext.Sibling.Where(a => a.ApplicantId == applicantId).OrderBy(a => a.SiblingName).ToList();
         }
 
         public void DeleteSibling(Sibling sibling)
         {
-            _AdmissionSystemDbContext.Siblings.Remove(sibling);
+            _AdmissionSystemDbContext.Sibling.Remove(sibling);
             //Applicant.Sibling.Remove(sibling);
         }
 
         public void UpdateSibling(Sibling sibling)
         {
-            _AdmissionSystemDbContext.Siblings.Update(sibling);
+            _AdmissionSystemDbContext.Sibling.Update(sibling);
             //throw new NotImplementedException();
         }
 
