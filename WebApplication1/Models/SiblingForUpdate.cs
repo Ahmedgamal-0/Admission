@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace AdmissionSystem.Models
 {
-    public class SiblingDto
+    public class SiblingForUpdate
     {
-        public Guid SibilingId { set; get; }
         public string Relationship { set; get; }
         public string SiblingName { set; get; }
         public int Age { set; get; }

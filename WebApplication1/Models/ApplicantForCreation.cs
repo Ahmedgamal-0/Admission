@@ -19,6 +19,6 @@ namespace AdmissionSystem.Models
         public String FamilyStatus { set; get; }
         public String SpokenLanguage { set; get; }
         public String Status { set; get; }
-        public String Payment { set; get; }
+        
     }
 }

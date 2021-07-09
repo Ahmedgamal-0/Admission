@@ -39,12 +39,12 @@ namespace WebApplication1
             services.AddScoped<IAdmissionRepo, AdmissionRepo>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<AdmissionSystemDbContext>(o => o.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB; Database = AdmissionDB; Trusted_Connection = True;"));
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory LoggerFactory)
-   
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory LoggerFactory)
+
         {
             LoggerFactory.AddConsole();
             if (env.IsDevelopment())
@@ -53,13 +53,22 @@ namespace WebApplication1
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async context =>
+                    {
+                        context.Response.StatusCode = 500;
+                        await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
+                    }
+                        );
+
+                });
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
+
             app.UseCookiePolicy();
 
             AutoMapper.Mapper.Initialize(cfg =>
@@ -69,13 +78,22 @@ namespace WebApplication1
                 cfg.CreateMap<ParentInfoForCreation, ParentInfo>();
                 cfg.CreateMap<EmergencyContactForCreation, EmergencyContact>();
 
-                cfg.CreateMap<SiblingDto, Sibling>();
-                cfg.CreateMap<MedicalHistoryDto, MedicalHistory>();
+                cfg.CreateMap<SiblingForCreation, Sibling>();
+                cfg.CreateMap<MedicalHistoryForCreation, MedicalHistory>();
+
+
+                cfg.CreateMap<Sibling, SiblingDto>();
+                cfg.CreateMap<MedicalHistory, MedicalHistoryDto>();
+
+                cfg.CreateMap<Sibling, SiblingForUpdate>();
+                cfg.CreateMap<SiblingForUpdate, Sibling>();
+                cfg.CreateMap<MedicalHistory, MedicalHistoryForUpdate>();
+                cfg.CreateMap<MedicalHistoryForUpdate, MedicalHistory>();
 
             });
 
             app.UseMvc();
-            
+
         }
     }
 }
