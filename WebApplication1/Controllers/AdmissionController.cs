@@ -67,10 +67,6 @@ namespace AdmissionSystem.Controllers
             return Ok();
         }
 
-
-      
-
-
         [HttpPost("AddSibling")]
         public IActionResult AddSibling(SiblingDto sibling)
         {
