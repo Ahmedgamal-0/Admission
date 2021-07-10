@@ -78,7 +78,7 @@ namespace AdmissionSystem.Controllers
             //HttpContext.Session.SetString("ApplicantId", "10");
 
             var siblingEntity = Mapper.Map<Sibling>(sibling);
-            _AdmissionRepo.AddSibling(siblingEntity);
+            _AdmissionRepo.AddSibling();
 
             if (!_AdmissionRepo.Save())
             {
