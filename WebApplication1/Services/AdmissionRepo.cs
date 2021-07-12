@@ -34,6 +34,25 @@ namespace AdmissionSystem.Services
             return Applicant;
 
         }
+        public IEnumerable <ParentInfo> GetParentsInfos(int ApplicantId)
+        {
+            return _AdmissionSystemDbContext.ParentInfo.Where(a => a.ApplicantId == ApplicantId).ToList();
+
+        }
+        public ParentInfo GetParentInfos(int ApplicantId,string Gender)
+        {
+            return _AdmissionSystemDbContext.ParentInfo.Where(a => a.ApplicantId == ApplicantId &&a.Gender==Gender).FirstOrDefault();
+
+        }
+
+        public IEnumerable<EmergencyContact>GetEmergencyContacts(int ApplicantId)
+        {
+            return _AdmissionSystemDbContext.EmergencyContact.Where(a => a.ApplicantId == ApplicantId).ToList();
+        }
+        public AdmissionDetails GetAdmissionDetails (int ApplicantId)
+        {
+            return _AdmissionSystemDbContext.AdmissionDetails.Where(a => a.ApplicantId == ApplicantId).FirstOrDefault();
+        }
         public bool ApplicantExist(int _ApplicantId)
         {
             var Applicant = _AdmissionSystemDbContext.Applicant.Any(a => a.ApplicantId == _ApplicantId);
@@ -116,6 +135,16 @@ namespace AdmissionSystem.Services
         {
             _AdmissionSystemDbContext.Sibling.Remove(sibling);
             //Applicant.Sibling.Remove(sibling);
+        }
+        public void UpdateApplicant(Applicant Applicant)
+        {
+            _AdmissionSystemDbContext.Applicant.Update(Applicant);
+            //throw new NotImplementedException();
+        }
+        public void UpdateParentInfo(ParentInfo ParentInfo)
+        {
+            _AdmissionSystemDbContext.ParentInfo.Update(ParentInfo);
+            //throw new NotImplementedException();
         }
 
         public void UpdateSibling(Sibling sibling)

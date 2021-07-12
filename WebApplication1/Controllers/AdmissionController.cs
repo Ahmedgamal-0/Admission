@@ -101,7 +101,7 @@ namespace AdmissionSystem.Controllers
         */
 
 
-        [HttpPost("{applicantId}/Sibling")]
+        [HttpPost("{ApplicantId}/Sibling")]
         public IActionResult AddSiblings(int applicantId, [FromBody] IEnumerable<SiblingForCreation> siblings)
         {
             if (siblings == null)
@@ -324,6 +324,41 @@ namespace AdmissionSystem.Controllers
 
             return Ok();
         }
+        [HttpPost("{ApplicantId}/AdmissionDetails")]
+        public IActionResult AddAdmissionDetails(int ApplicantId, [FromBody] AdmissionDetailsForCreation admissionDetails)
+        {
+            if (admissionDetails == null)
+            {
+                return BadRequest();
+            }
+            if (_AdmissionRepo.GetApplicant(ApplicantId)==null)
+            {
+                return NotFound();
+            }
+            var AdmissionDetailsToSave = Mapper.Map<AdmissionDetails>(admissionDetails);
+            _AdmissionRepo.AddAdmissionDetails(ApplicantId,AdmissionDetailsToSave);
+            if (!_AdmissionRepo.Save())
+            {
+                throw new Exception("failed to add a add Admission Details");
+            }
+            return Ok();
+
+
+
+        }
+        [HttpGet("{ApplicantId}")]
+        public IActionResult GetApplicant(int applicantId)
+        {
+            var Applicant = _AdmissionRepo.GetApplicant(applicantId);
+            if (Applicant == null)
+            {
+                return NotFound();
+            }
+            var ApplicantToRetrive = Mapper.Map<ApplicantDto>(Applicant);
+            return Ok(ApplicantToRetrive);
+
+
+        }
                 
         [HttpGet("{applicantId}/Medical/{id}")]
         public IActionResult GetMedicalDetails(int applicantId, Guid id)
@@ -339,6 +374,29 @@ namespace AdmissionSystem.Controllers
 
             return Ok(MedicalDetails);
 
+        }
+        [HttpGet("{ApplicantId}/EmergencyContacts")]
+        public IActionResult GetEmergencyContacts(int ApplicantId)
+        {
+            var EmergencyContacts = _AdmissionRepo.GetEmergencyContacts(ApplicantId);
+            if (EmergencyContacts == null)
+            {
+                return NotFound();
+            }
+            var EmergencyContactsToRetrive = Mapper.Map<IEnumerable<EmergencyContactDto>>(EmergencyContacts);
+            return Ok(EmergencyContactsToRetrive);
+
+        }
+        [HttpGet("{ApplicantId}/AdmissionDetails")]
+        public IActionResult GetAdmissionDetails(int ApplicantId)
+        {
+            var AdmissionDetails = _AdmissionRepo.GetAdmissionDetails(ApplicantId);
+            if (AdmissionDetails == null)
+            {
+                return NotFound();
+            }
+            var AdmissionDetailsToReturn = Mapper.Map<AdmissionDetailsDto>(AdmissionDetails);
+            return Ok(AdmissionDetailsToReturn);
         }
 
         [HttpGet("{applicantId}/Siblings/{id}", Name = "getSibling")]
@@ -407,6 +465,28 @@ namespace AdmissionSystem.Controllers
 
             return NoContent();
 
+        }
+        [HttpGet("{ApplicantId}/ParentInfo")]
+        public IActionResult GetParentsInfo(int ApplicantId)
+        {
+            var ParentInfo = _AdmissionRepo.GetParentsInfos(ApplicantId);
+            if (ParentInfo == null)
+            {
+                return NotFound();
+            }
+            var ParentInfoToReturn = Mapper.Map<IEnumerable<ParentInfoDto>>(ParentInfo);
+            return Ok(ParentInfoToReturn);
+        }
+        [HttpGet("{ApplicantId}/ParentInfo/{Gender}")]
+        public IActionResult GetParentInfo(int ApplicantId,string Gender)
+        {
+            var ParentInfo = _AdmissionRepo.GetParentInfos(ApplicantId,Gender);
+            if (ParentInfo == null)
+            {
+                return NotFound();
+            }
+            var ParentInfoToReturn = Mapper.Map<ParentInfoDto>(ParentInfo);
+            return Ok(ParentInfoToReturn);
         }
 
 

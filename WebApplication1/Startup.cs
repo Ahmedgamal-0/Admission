@@ -76,19 +76,20 @@ namespace WebApplication1
                 cfg.CreateMap<AdmissionSystem.Models.ApplicantForCreation, AdmissionSystem.Entities.Applicant>();
 
                 cfg.CreateMap<ParentInfoForCreation, ParentInfo>();
+                cfg.CreateMap<ParentInfo, ParentInfoDto>();
                 cfg.CreateMap<EmergencyContactForCreation, EmergencyContact>();
-
+                cfg.CreateMap<EmergencyContact, EmergencyContactDto>();
                 cfg.CreateMap<SiblingForCreation, Sibling>();
-                cfg.CreateMap<MedicalHistoryForCreation, MedicalHistory>();
-
-
-                cfg.CreateMap<Sibling, SiblingDto>();
-                cfg.CreateMap<MedicalHistory, MedicalHistoryDto>();
-
                 cfg.CreateMap<Sibling, SiblingForUpdate>();
                 cfg.CreateMap<SiblingForUpdate, Sibling>();
+                cfg.CreateMap<Sibling, SiblingDto>();
+                cfg.CreateMap<MedicalHistoryForCreation, MedicalHistory>();
+                cfg.CreateMap<MedicalHistory, MedicalHistoryDto>();
                 cfg.CreateMap<MedicalHistory, MedicalHistoryForUpdate>();
                 cfg.CreateMap<MedicalHistoryForUpdate, MedicalHistory>();
+                cfg.CreateMap<AdmissionDetails, AdmissionDetailsDto>();
+                cfg.CreateMap<AdmissionDetailsForCreation, AdmissionDetails>();
+                cfg.CreateMap<Applicant, ApplicantDto>();
 
             });
 

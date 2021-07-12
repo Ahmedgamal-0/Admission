@@ -17,8 +17,13 @@ namespace AdmissionSystem.Services
         void AddSibling(int applicantId, Sibling sibling);
         void AddMedicalDetails(int applicantId, MedicalHistory medicalHistory);
         void MakePayment(Payment payment);
-
         Applicant GetApplicant(int ApplicantId);
+        IEnumerable<ParentInfo> GetParentsInfos(int ApplicantId);
+        ParentInfo GetParentInfos(int ApplicantId, string Gender);
+        IEnumerable<EmergencyContact> GetEmergencyContacts(int ApplicantId);
+        AdmissionDetails GetAdmissionDetails(int ApplicantId);
+        void UpdateApplicant(Applicant Applicant);
+        void UpdateParentInfo(ParentInfo ParentInfo);
         MedicalHistory GetMedicalHistory(int applicantId, Guid MedicalHistoryId);
         Sibling GetSibling(int applicantId, Guid siblingId);
         IEnumerable<Sibling> GetSiblings(int applicantId);
